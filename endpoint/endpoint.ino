@@ -7,7 +7,7 @@
 
 const char *msg = "win";
 
-RH_ASK radio(2000, RF_RX, NULL);
+RH_ASK radio(2000, RF_RX, 0);
 
 void setup(void) {
 #	ifdef DEBUG
