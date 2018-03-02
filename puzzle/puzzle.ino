@@ -2,8 +2,9 @@
 #include <PN532_SPI.h>
 #include <PN532.h>
 #include "hal.h"
+#include "maybe.h"
 
-/* #define DEBUG */
+#define DEBUG
 #define die()	while (1)
 
 enum constants {
@@ -49,42 +50,40 @@ void setup(void) {
 }
 
 void loop(void) {
-	struct uid uid = { .val = {0, 0, 0, 0, 0, 0, 0}, .length = 7};
-	bool success = find_tag(&uid);
-	if (success) {
-		uint8_t data[32];
-		success = read_tag(data);
-		if (success && data[0] == WIN_TAG_DATA) {
-			radio.send((uint8_t *) msg, strlen(msg));
-			radio.waitPacketSent();
-#			ifdef DEBUG
-			Serial.print("Sent: ");
-			Serial.println(msg);
-#			endif
-		}
-	}
-
+	maybe uid = find_tag();
+	maybe data = bind(read_tag, uid);
+	bind(handle_win, data);
 	delay(500);
 }
 
 /* Finds Mifare Ultralight tag */
-static bool find_tag(struct uid *uid) {
-	uint8_t success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, uid->val, &uid->length);
+/* void -> maybe uid */
+static maybe find_tag(void) {
+	Serial.println("find_tag");	/* TEST */
+	struct uid uid = { .val = {0, 0, 0, 0, 0, 0, 0}, .length = 7};
+	uint8_t success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, uid.val, &uid.length);
 
 #	ifdef DEBUG
 	if (success) {
 		Serial.println("UID: ");
-		nfc.PrintHex(uid->val, uid->length);
+		nfc.PrintHex(uid.val, uid.length);
 		Serial.println("");
 	}
 #	endif
 
-	return (success && uid->length == 7);
+	if (success && uid.length == 7) {
+		return mreturn(&uid);
+	} else {
+		return nothing();
+	}
 }
 
 /* Reads Mifare Ultralight tag data to buffer */
-static bool read_tag(uint8_t *data) {
-	uint8_t success = nfc.mifareultralight_ReadPage (4, data);
+/* void -> maybe uint8_t[] */
+static maybe read_tag(void *) {
+	Serial.println("read_tag");	/* TEST */
+	static uint8_t data[32];
+	uint8_t success = nfc.mifareultralight_ReadPage(4, data);
 
 #	ifdef DEBUG
 	if (success) {
@@ -94,5 +93,25 @@ static bool read_tag(uint8_t *data) {
 	}
 #	endif
 
-	return success;
+	if (success) {
+		return mreturn(&data);
+	} else {
+		return nothing();
+	}
+}
+
+/* Handles the winning condition if it is met */
+/* uint8_t[] -> maybe void */
+static maybe handle_win(void *data_) {
+	Serial.println("handle_win");	/* TEST */
+	uint8_t *data = (uint8_t *) data_;
+	if (data[0] == WIN_TAG_DATA) {
+		radio.send((uint8_t *) msg, strlen(msg));
+		radio.waitPacketSent();
+#	   	ifdef DEBUG
+		Serial.print("Sent: ");
+		Serial.println(msg);
+#		endif
+	}
+	return nothing();
 }
