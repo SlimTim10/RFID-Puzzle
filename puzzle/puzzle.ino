@@ -3,8 +3,12 @@
 #include <PN532.h>
 #include "hal.h"
 
-#define DEBUG
+/* #define DEBUG */
 #define die()	while (1)
+
+enum constants {
+	WIN_TAG_DATA = 0x01,
+};
 
 struct uid {
 	uint8_t val[7];
@@ -48,51 +52,47 @@ void loop(void) {
 	struct uid uid = { .val = {0, 0, 0, 0, 0, 0, 0}, .length = 7};
 	bool success = find_tag(&uid);
 	if (success) {
-#		ifdef DEBUG
-		Serial.println("UID: ");
-		nfc.PrintHex(uid.val, uid.length);
-		Serial.println("");
-#		endif
-		
-		success = auth_tag(&uid);
-		if (success) {
+		uint8_t data[32];
+		success = read_tag(data);
+		if (success && data[0] == WIN_TAG_DATA) {
+			radio.send((uint8_t *) msg, strlen(msg));
+			radio.waitPacketSent();
 #			ifdef DEBUG
-			Serial.println("Sector 1 (blocks 4-7) has been authenticated");
+			Serial.print("Sent: ");
+			Serial.println(msg);
 #			endif
-			
-			uint8_t data[16];
-			success = read_tag(data);
-			if (success && data[0] == 0x01) {
-#				ifdef DEBUG
-				Serial.println("Reading block 4:");
-				nfc.PrintHexChar(data, 16);
-				Serial.println("");
-#				endif
-				
-				radio.send((uint8_t *) msg, strlen(msg));
-				radio.waitPacketSent();
-				
-#				ifdef DEBUG
-				Serial.print("Sent: ");
-				Serial.println(msg);
-#				endif
-			}
 		}
 	}
+
+	delay(500);
 }
 
+/* Finds Mifare Ultralight tag */
 static bool find_tag(struct uid *uid) {
 	uint8_t success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, uid->val, &uid->length);
-	return (success && uid->length == 4);
+
+#	ifdef DEBUG
+	if (success) {
+		Serial.println("UID: ");
+		nfc.PrintHex(uid->val, uid->length);
+		Serial.println("");
+	}
+#	endif
+
+	return (success && uid->length == 7);
 }
 
-static bool auth_tag(struct uid *uid) {
-	uint8_t keya[6] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
-	uint8_t success = nfc.mifareclassic_AuthenticateBlock(uid->val, uid->length, 4, 0, keya);
-	return success;
-}
-
+/* Reads Mifare Ultralight tag data to buffer */
 static bool read_tag(uint8_t *data) {
-	uint8_t success = nfc.mifareclassic_ReadDataBlock(4, data);
+	uint8_t success = nfc.mifareultralight_ReadPage (4, data);
+
+#	ifdef DEBUG
+	if (success) {
+		Serial.println("Reading page 4:");
+		nfc.PrintHexChar(data, 4);
+		Serial.println("");
+	}
+#	endif
+
 	return success;
 }

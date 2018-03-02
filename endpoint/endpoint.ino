@@ -1,7 +1,7 @@
 #include <RH_ASK.h>
 #include "hal.h"
 
-#define DEBUG
+/* #define DEBUG */
 
 #define die()	while (1)
 
@@ -35,7 +35,7 @@ void loop(void) {
 #		ifdef DEBUG
 		radio.printBuffer("Received:", buf, buflen);
 #		endif
-		if (strncmp((const char *) buf, msg, buflen)) {
+		if (strncmp((const char *) buf, msg, strlen(msg)) == 0) {
 			led_on();
 			delay(1000);
 			led_off();
