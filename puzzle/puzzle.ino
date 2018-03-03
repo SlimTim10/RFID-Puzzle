@@ -59,7 +59,6 @@ void loop(void) {
 /* Finds Mifare Ultralight tag */
 /* void -> maybe uid */
 static maybe find_tag(void) {
-	Serial.println("find_tag");	/* TEST */
 	struct uid uid = { .val = {0, 0, 0, 0, 0, 0, 0}, .length = 7};
 	uint8_t success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, uid.val, &uid.length);
 
@@ -81,7 +80,6 @@ static maybe find_tag(void) {
 /* Reads Mifare Ultralight tag data to buffer */
 /* void -> maybe uint8_t[] */
 static maybe read_tag(void *) {
-	Serial.println("read_tag");	/* TEST */
 	static uint8_t data[32];
 	uint8_t success = nfc.mifareultralight_ReadPage(4, data);
 
@@ -103,7 +101,6 @@ static maybe read_tag(void *) {
 /* Handles the winning condition if it is met */
 /* uint8_t[] -> maybe void */
 static maybe handle_win(void *data_) {
-	Serial.println("handle_win");	/* TEST */
 	uint8_t *data = (uint8_t *) data_;
 	if (data[0] == WIN_TAG_DATA) {
 		radio.send((uint8_t *) msg, strlen(msg));
