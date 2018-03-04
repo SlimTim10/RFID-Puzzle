@@ -50,15 +50,18 @@ void setup(void) {
 }
 
 void loop(void) {
-	maybe uid = find_tag();
-	maybe data = bind(read_tag, uid);
-	bind(handle_win, data);
+	maybe_do
+		(mstart,
+		 find_tag,
+		 read_tag,
+		 handle_win);
+	
 	delay(500);
 }
 
 /* Finds Mifare Ultralight tag */
 /* void -> maybe uid */
-static maybe find_tag(void) {
+static maybe find_tag(void *empty_) {
 	struct uid uid = { .val = {0, 0, 0, 0, 0, 0, 0}, .length = 7};
 	uint8_t success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, uid.val, &uid.length);
 
@@ -79,7 +82,7 @@ static maybe find_tag(void) {
 
 /* Reads Mifare Ultralight tag data to buffer */
 /* void -> maybe uint8_t[] */
-static maybe read_tag(void *) {
+static maybe read_tag(void *empty_) {
 	static uint8_t data[32];
 	uint8_t success = nfc.mifareultralight_ReadPage(4, data);
 
