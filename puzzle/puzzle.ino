@@ -18,9 +18,11 @@ struct uid {
 
 const char *msg = "win";
 
-RH_ASK radio(2000, 0, RF_TX);
-PN532_SPI pn532spi(SPI, NFC_CS);
-PN532 nfc(pn532spi);
+static RH_ASK radio(2000, 0, RF_TX);
+static PN532_SPI pn532spi(SPI, NFC_CS);
+static PN532 nfc(pn532spi);
+struct uid uid = { .val = {0, 0, 0, 0, 0, 0, 0}, .length = 7};
+static uint8_t data[32];
 
 void setup(void) {
 #	ifdef DEBUG
@@ -62,7 +64,6 @@ void loop(void) {
 /* Finds Mifare Ultralight tag */
 /* void -> maybe uid */
 static maybe find_tag(void *empty_) {
-	struct uid uid = { .val = {0, 0, 0, 0, 0, 0, 0}, .length = 7};
 	uint8_t success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, uid.val, &uid.length);
 
 #	ifdef DEBUG
@@ -83,7 +84,6 @@ static maybe find_tag(void *empty_) {
 /* Reads Mifare Ultralight tag data to buffer */
 /* void -> maybe uint8_t[] */
 static maybe read_tag(void *empty_) {
-	static uint8_t data[32];
 	uint8_t success = nfc.mifareultralight_ReadPage(4, data);
 
 #	ifdef DEBUG
