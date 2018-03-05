@@ -4,7 +4,8 @@
 #include "hal.h"
 #include "maybe.h"
 
-#define DEBUG
+/* #define DEBUG */
+
 #define die()	while (1)
 
 enum constants {
