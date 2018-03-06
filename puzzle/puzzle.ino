@@ -1,8 +1,8 @@
 #include <RH_ASK.h>
 #include <PN532_SPI.h>
 #include <PN532.h>
+#include <maybe.h>
 #include "hal.h"
-#include "maybe.h"
 
 /* #define DEBUG */
 
@@ -17,7 +17,7 @@ struct uid {
 	uint8_t length;
 };
 
-const char *msg = "win";
+const char *WIN_MESSAGE = "win";
 
 static RH_ASK radio(2000, 0, RF_TX);
 static PN532_SPI pn532spi(SPI, NFC_CS);
@@ -107,11 +107,11 @@ static maybe read_tag(void *empty_) {
 static maybe handle_win(void *data_) {
 	uint8_t *data = (uint8_t *) data_;
 	if (data[0] == WIN_TAG_DATA) {
-		radio.send((uint8_t *) msg, strlen(msg));
+		radio.send((uint8_t *) WIN_MESSAGE, strlen(WIN_MESSAGE));
 		radio.waitPacketSent();
 #	   	ifdef DEBUG
 		Serial.print("Sent: ");
-		Serial.println(msg);
+		Serial.println(WIN_MESSAGE);
 #		endif
 	}
 	return nothing();
