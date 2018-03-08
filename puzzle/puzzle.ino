@@ -54,8 +54,7 @@ void setup(void) {
 
 void loop(void) {
 	maybe_do
-		(mstart,
-		 find_tag,
+		(find_tag,
 		 read_tag,
 		 handle_win);
 	
