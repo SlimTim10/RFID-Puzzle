@@ -3,7 +3,7 @@
 
 enum pins {
 	RF_RX = 2,
-	LED = 4,
+	SERVO = 9,
 };
 
 #endif

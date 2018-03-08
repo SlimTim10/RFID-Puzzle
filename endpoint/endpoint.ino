@@ -1,4 +1,5 @@
 #include <RH_ASK.h>
+#include <Servo.h>
 #include <maybe.h>
 #include "hal.h"
 
@@ -11,6 +12,7 @@ const char *WIN_MESSAGE = "win";
 static RH_ASK radio(2000, RF_RX, 0);
 static uint8_t buf[RH_ASK_MAX_MESSAGE_LEN];
 static uint8_t buflen = sizeof(buf);
+static Servo servo;
 
 void setup(void) {
 #	ifdef DEBUG
@@ -18,22 +20,24 @@ void setup(void) {
 	Serial.println("Initializing radio");
 #	endif
 
-	pinMode(LED, OUTPUT);
-
-	led_off();
-
 	if (!radio.init()) {
 #		ifdef DEBUG
 		Serial.println("Init failed");
 #		endif
 		die();
 	}
+
+	servo.attach(SERVO);
+	sweep_right();
+
+#	ifdef DEBUG
+	Serial.println("Ready");
+#	endif
 }
 
 void loop(void) {
 	maybe_do
-		(mstart,
-		 receive_msg,
+		(receive_msg,
 		 handle_win);
 }
 
@@ -55,17 +59,20 @@ static maybe receive_msg(void *empty_) {
 static maybe handle_win(void *buf_) {
 	uint8_t *msg = (uint8_t *) buf_;
 	if (strncmp((const char *) msg, WIN_MESSAGE, strlen(WIN_MESSAGE)) == 0) {
-		led_on();
+#		ifdef DEBUG
+		Serial.println("Winner!");
+#		endif
+		sweep_left();
 		delay(1000);
-		led_off();
+		sweep_right();
 	}
 	return nothing();
 }
 
-static void led_off(void) {
-	digitalWrite(LED, LOW);
+static void sweep_left(void) {
+	servo.write(180);
 }
 
-static void led_on(void) {
-	digitalWrite(LED, HIGH);
+static void sweep_right(void) {
+	servo.write(45);
 }
