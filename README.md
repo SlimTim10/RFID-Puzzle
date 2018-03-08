@@ -8,6 +8,7 @@ This project consists of two major components: the puzzle and an endpoint. The p
 
 - [RadioHead](https://github.com/PaulStoffregen/RadioHead) RF library
 - [PN532](https://github.com/Seeed-Studio/PN532) NFC library
+- [MaybeC](https://github.com/SlimTim10/MaybeC)
 
 ## Hardware
 
