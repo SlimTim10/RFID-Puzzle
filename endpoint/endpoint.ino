@@ -74,5 +74,5 @@ static void sweep_left(void) {
 }
 
 static void sweep_right(void) {
-	servo.write(45);
+	servo.write(90);
 }
