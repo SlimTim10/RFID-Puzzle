@@ -16,6 +16,7 @@ struct uid {
 enum constants {
 	NUM_NFC = 2,
 	NFC_INIT_ATTEMPTS = 3,
+	NFC_FIND_ATTEMPTS = 3,
 };
 
 static const char *WIN_MESSAGE = "win";
@@ -44,27 +45,32 @@ static uint8_t tag_data[3];
 void setup(void) {
 #	ifdef DEBUG
 	Serial.begin(115200);
-	Serial.println("Initializing radio!");
+	Serial.println("Initializing radio");
 #	endif
 
 	if (!radio.init()) {
 #		ifdef DEBUG
-		Serial.println("Init failed");
+		Serial.println("Radio initialization failed");
 #		endif
 		die();
 	}
 
+#	ifdef DEBUG
+	Serial.println("Initializing NFC boards");
+#	endif
 	uint8_t i;
 	for (i = 0; i < NUM_NFC; i++) {
 		if (!init_nfc(nfc[i])) {
+#			ifdef DEBUG
 			Serial.print("Didn't find PN53x board: ");
 			Serial.println(i);
+#			endif
 			die();
 		}
 	}
 
 #	ifdef DEBUG
-	Serial.println("Ready");
+	Serial.println("Ready!");
 #	endif
 }
 
@@ -77,14 +83,22 @@ void loop(void) {
 	delay(500);
 }
 
+static bool nfc_read_passive_target(uint8_t x) {
+	bool found = false;
+	uint8_t j;
+	for (j = 0; j < NFC_FIND_ATTEMPTS && !found; j++) {
+		found = nfc[x]->readPassiveTargetID(PN532_MIFARE_ISO14443A, uid[x].val, &uid[x].length);
+	}
+	return found;
+}
+
 /* Finds Mifare Ultralight tag */
 /* void -> maybe uid[] */
 static maybe find_tags(void *empty_) {
 	bool success = true;
 	uint8_t i;
 	for (i = 0; i < NUM_NFC && success; i++) {
-		nfc[i]->getFirmwareVersion(); /* Needed for successful consecutive readings */
-		success = nfc[i]->readPassiveTargetID(PN532_MIFARE_ISO14443A, uid[i].val, &uid[i].length);
+		success = nfc_read_passive_target(i);
 		success &= (uid[i].length == 7);
 
 #		ifdef DEBUG
