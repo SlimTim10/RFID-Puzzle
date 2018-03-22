@@ -80,7 +80,7 @@ void loop(void) {
 /* Finds Mifare Ultralight tag */
 /* void -> maybe uid[] */
 static maybe find_tags(void *empty_) {
-	uint8_t success = true;
+	bool success = true;
 	uint8_t i;
 	for (i = 0; i < NUM_NFC && success; i++) {
 		nfc[i]->getFirmwareVersion(); /* Needed for successful consecutive readings */
@@ -106,7 +106,7 @@ static maybe find_tags(void *empty_) {
 /* Reads Mifare Ultralight tag data to buffer */
 /* void -> maybe uint8_t[3] */
 static maybe read_tags(void *empty_) {
-	uint8_t success = true;
+	bool success = true;
 	uint8_t i;
 	for (i = 0; i < NUM_NFC && success; i++) {
 		success = nfc[i]->mifareultralight_ReadPage(4, buf);
@@ -131,7 +131,14 @@ static maybe read_tags(void *empty_) {
 /* uint8_t[] -> maybe void */
 static maybe handle_win(void *data_) {
 	uint8_t *data = (uint8_t *) data_;
-	if (data[0] == WIN_TAG_DATA[0]) {
+	
+	bool success = true;
+	uint8_t i;
+	for (i = 0; i < NUM_NFC && success; i++) {
+		success &= (data[i] == WIN_TAG_DATA[i]);
+	}
+	
+	if (success) {
 		radio.send((uint8_t *) WIN_MESSAGE, strlen(WIN_MESSAGE));
 		radio.waitPacketSent();
 #	   	ifdef DEBUG
