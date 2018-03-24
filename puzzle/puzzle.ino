@@ -4,7 +4,7 @@
 #include <maybe.h>
 #include "hal.h"
 
-/* #define DEBUG */
+#define DEBUG
 
 #define die()	while (1)
 
@@ -44,6 +44,8 @@ static uint8_t buf[32];
 static uint8_t tag_data[3];
 
 void setup(void) {
+	hal_setup();
+
 #	ifdef DEBUG
 	Serial.begin(115200);
 	Serial.println("Initializing radio");
