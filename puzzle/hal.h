@@ -8,4 +8,6 @@ enum pins {
 	NFC_CS_2 = 10,
 };
 
+void hal_setup(void);
+
 #endif
