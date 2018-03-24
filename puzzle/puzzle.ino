@@ -4,7 +4,7 @@
 #include <maybe.h>
 #include "hal.h"
 
-#define DEBUG
+/* #define DEBUG */
 
 #define die()	while (1)
 
