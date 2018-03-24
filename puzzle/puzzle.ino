@@ -14,9 +14,10 @@ struct uid {
 };
 
 enum constants {
-	NUM_NFC = 2,
+	NUM_NFC = 3,
 	NFC_INIT_ATTEMPTS = 3,
 	NFC_FIND_ATTEMPTS = 3,
+	WIN_REPEAT = 5,
 };
 
 static const char *WIN_MESSAGE = "win";
@@ -60,10 +61,13 @@ void setup(void) {
 #	endif
 	uint8_t i;
 	for (i = 0; i < NUM_NFC; i++) {
-		if (!init_nfc(nfc[i])) {
+		if (init_nfc(nfc[i])) {
 #			ifdef DEBUG
-			Serial.print("Didn't find PN53x board: ");
-			Serial.println(i);
+			Serial.print("Found board #"); Serial.println(i);
+#			endif
+		} else {
+#			ifdef DEBUG
+			Serial.print("Didn't find PN53x board #"); Serial.println(i);
 #			endif
 			die();
 		}
@@ -153,12 +157,16 @@ static maybe handle_win(void *data_) {
 	}
 	
 	if (success) {
-		radio.send((uint8_t *) WIN_MESSAGE, strlen(WIN_MESSAGE));
-		radio.waitPacketSent();
-#	   	ifdef DEBUG
-		Serial.print("Sent: ");
-		Serial.println(WIN_MESSAGE);
-#		endif
+		uint8_t j;
+		for (j = 0; j < WIN_REPEAT; j++) {
+			radio.send((uint8_t *) WIN_MESSAGE, strlen(WIN_MESSAGE));
+			radio.waitPacketSent();
+#		   	ifdef DEBUG
+			Serial.print("Sent: "); Serial.println(WIN_MESSAGE);
+#			endif
+			delay(50);
+		}
+		delay(5000);
 	}
 	return nothing();
 }
