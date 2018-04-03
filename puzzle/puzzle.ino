@@ -13,11 +13,12 @@ struct uid {
 	uint8_t length;
 };
 
-enum constants {
+enum settings {
 	NUM_NFC = 3,
 	NFC_INIT_ATTEMPTS = 3,
 	NFC_FIND_ATTEMPTS = 3,
-	WIN_REPEAT = 5,
+	WIN_REPEAT = 3,
+	RESET_DELAY = 5000,		/* 5 seconds before resetting after win */
 };
 
 static const char *WIN_MESSAGE = "win";
@@ -168,7 +169,7 @@ static maybe handle_win(void *data_) {
 #			endif
 			delay(50);
 		}
-		delay(5000);
+		delay(RESET_DELAY);
 	}
 	return nothing();
 }
