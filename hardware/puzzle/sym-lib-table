@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name rfid-puzzle)(type Legacy)(uri C:/Users/Tim/home/Projects/RFID-Puzzle/hardware/rfid-puzzle.lib)(options "")(descr ""))
+)
