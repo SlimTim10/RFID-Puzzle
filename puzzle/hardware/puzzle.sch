@@ -1,0 +1,263 @@
+EESchema Schematic File Version 4
+EELAYER 26 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L MCU_Module:Arduino_UNO_R3 U1
+U 1 1 5BF5B079
+P 7250 3550
+F 0 "U1" H 7250 4728 50  0000 C CNN
+F 1 "Arduino_UNO_R3" H 7250 4637 50  0000 C CNN
+F 2 "Module:Arduino_UNO_R3" H 7400 2500 50  0001 L CNN
+F 3 "https://www.arduino.cc/en/Main/arduinoBoardUno" H 7050 4600 50  0001 C CNN
+	1    7250 3550
+	1    0    0    -1  
+$EndComp
+$Comp
+L rfid-puzzle:NFC_SHIELD_V2 U2
+U 1 1 5BF5B6E9
+P 5100 2650
+F 0 "U2" H 5100 3115 50  0000 C CNN
+F 1 "NFC_SHIELD_V2" H 5100 3024 50  0000 C CNN
+F 2 "" H 5100 2650 50  0001 C CNN
+F 3 "" H 5100 2650 50  0001 C CNN
+	1    5100 2650
+	1    0    0    -1  
+$EndComp
+$Comp
+L rfid-puzzle:NFC_SHIELD_V2 U3
+U 1 1 5BF5B729
+P 5100 3850
+F 0 "U3" H 5100 4315 50  0000 C CNN
+F 1 "NFC_SHIELD_V2" H 5100 4224 50  0000 C CNN
+F 2 "" H 5100 3850 50  0001 C CNN
+F 3 "" H 5100 3850 50  0001 C CNN
+	1    5100 3850
+	1    0    0    -1  
+$EndComp
+$Comp
+L rfid-puzzle:NFC_SHIELD_V2 U4
+U 1 1 5BF5B761
+P 5100 5050
+F 0 "U4" H 5100 5515 50  0000 C CNN
+F 1 "NFC_SHIELD_V2" H 5100 5424 50  0000 C CNN
+F 2 "" H 5100 5050 50  0001 C CNN
+F 3 "" H 5100 5050 50  0001 C CNN
+	1    5100 5050
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5BF5C486
+P 4500 5500
+F 0 "#PWR?" H 4500 5250 50  0001 C CNN
+F 1 "GND" H 4505 5327 50  0000 C CNN
+F 2 "" H 4500 5500 50  0001 C CNN
+F 3 "" H 4500 5500 50  0001 C CNN
+	1    4500 5500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4750 2750 4500 2750
+Wire Wire Line
+	4500 2750 4500 3950
+Wire Wire Line
+	4750 3950 4500 3950
+Connection ~ 4500 3950
+Wire Wire Line
+	4500 3950 4500 5150
+Wire Wire Line
+	4750 5150 4500 5150
+Connection ~ 4500 5150
+Wire Wire Line
+	4500 5150 4500 5500
+$Comp
+L power:+5V #PWR?
+U 1 1 5BF5C53B
+P 4650 1850
+F 0 "#PWR?" H 4650 1700 50  0001 C CNN
+F 1 "+5V" H 4665 2023 50  0000 C CNN
+F 2 "" H 4650 1850 50  0001 C CNN
+F 3 "" H 4650 1850 50  0001 C CNN
+	1    4650 1850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4750 2550 4650 2550
+Wire Wire Line
+	4650 2550 4650 1850
+Wire Wire Line
+	4750 3750 4650 3750
+Wire Wire Line
+	4650 3750 4650 2550
+Connection ~ 4650 2550
+Wire Wire Line
+	4750 4950 4650 4950
+Wire Wire Line
+	4650 4950 4650 3750
+Connection ~ 4650 3750
+$Comp
+L power:+5V #PWR?
+U 1 1 5BF5C69E
+P 7450 1850
+F 0 "#PWR?" H 7450 1700 50  0001 C CNN
+F 1 "+5V" H 7465 2023 50  0000 C CNN
+F 2 "" H 7450 1850 50  0001 C CNN
+F 3 "" H 7450 1850 50  0001 C CNN
+	1    7450 1850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7450 2550 7450 1850
+$Comp
+L power:GND #PWR?
+U 1 1 5BF5C7E4
+P 7150 5500
+F 0 "#PWR?" H 7150 5250 50  0001 C CNN
+F 1 "GND" H 7155 5327 50  0000 C CNN
+F 2 "" H 7150 5500 50  0001 C CNN
+F 3 "" H 7150 5500 50  0001 C CNN
+	1    7150 5500
+	1    0    0    -1  
+$EndComp
+Connection ~ 7150 5500
+Wire Wire Line
+	7150 5500 7250 5500
+Wire Wire Line
+	7150 4650 7150 5500
+Wire Wire Line
+	7250 4650 7250 5500
+Connection ~ 7250 5500
+Wire Wire Line
+	7250 5500 7350 5500
+Wire Wire Line
+	7350 4650 7350 5500
+Wire Wire Line
+	6750 4050 5900 4050
+Wire Wire Line
+	5900 4050 5900 3800
+Wire Wire Line
+	5900 3800 5450 3800
+Wire Wire Line
+	6750 4150 5800 4150
+Wire Wire Line
+	5800 4150 5800 3700
+Wire Wire Line
+	5800 3700 5450 3700
+Wire Wire Line
+	6750 4250 5700 4250
+Wire Wire Line
+	5700 4250 5700 3900
+Wire Wire Line
+	5700 3900 5450 3900
+Wire Wire Line
+	5800 3700 5800 2500
+Wire Wire Line
+	5800 2500 5450 2500
+Connection ~ 5800 3700
+Wire Wire Line
+	5900 3800 5900 2600
+Wire Wire Line
+	5900 2600 5450 2600
+Connection ~ 5900 3800
+Wire Wire Line
+	5700 3900 5700 2700
+Wire Wire Line
+	5700 2700 5450 2700
+Connection ~ 5700 3900
+Wire Wire Line
+	5700 4250 5700 5100
+Wire Wire Line
+	5700 5100 5450 5100
+Connection ~ 5700 4250
+Wire Wire Line
+	5800 4150 5800 4900
+Wire Wire Line
+	5800 4900 5450 4900
+Connection ~ 5800 4150
+Wire Wire Line
+	5900 4050 5900 5000
+Wire Wire Line
+	5900 5000 5450 5000
+Connection ~ 5900 4050
+Wire Wire Line
+	6750 3750 6500 3750
+Wire Wire Line
+	6500 3750 6500 2800
+Wire Wire Line
+	6500 2800 5450 2800
+Wire Wire Line
+	6750 3850 6500 3850
+Wire Wire Line
+	6500 3850 6500 4000
+Wire Wire Line
+	6500 4000 5450 4000
+Wire Wire Line
+	6750 3950 6600 3950
+Wire Wire Line
+	6600 3950 6600 5200
+Wire Wire Line
+	6600 5200 5450 5200
+$Comp
+L rfid-puzzle:RF_LINK_TX U?
+U 1 1 5BFC55DB
+P 9200 3450
+F 0 "U?" H 9328 3496 50  0000 L CNN
+F 1 "RF_LINK_TX" H 9328 3405 50  0000 L CNN
+F 2 "" H 9150 3400 50  0001 C CNN
+F 3 "" H 9150 3400 50  0001 C CNN
+	1    9200 3450
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR?
+U 1 1 5BFC5734
+P 8750 1850
+F 0 "#PWR?" H 8750 1700 50  0001 C CNN
+F 1 "+5V" H 8765 2023 50  0000 C CNN
+F 2 "" H 8750 1850 50  0001 C CNN
+F 3 "" H 8750 1850 50  0001 C CNN
+	1    8750 1850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8950 3450 8750 3450
+Wire Wire Line
+	8750 3450 8750 1850
+$Comp
+L power:GND #PWR?
+U 1 1 5BFC7AFA
+P 8750 5500
+F 0 "#PWR?" H 8750 5250 50  0001 C CNN
+F 1 "GND" H 8755 5327 50  0000 C CNN
+F 2 "" H 8750 5500 50  0001 C CNN
+F 3 "" H 8750 5500 50  0001 C CNN
+	1    8750 5500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8950 3550 8750 3550
+Wire Wire Line
+	8750 3550 8750 5500
+Wire Wire Line
+	8950 3350 8900 3350
+Wire Wire Line
+	8900 3350 8900 2200
+Wire Wire Line
+	8900 2200 6650 2200
+Wire Wire Line
+	6650 2200 6650 3150
+Wire Wire Line
+	6650 3150 6750 3150
+$EndSCHEMATC

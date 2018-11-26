@@ -16,4 +16,8 @@ $CMP SERVO
 F https://www.digikey.ca/product-detail/en/dfrobot/SER0011/1738-1232-ND/7087129
 $ENDCMP
 #
+$CMP SERVO_MICRO_METAL
+F https://www.digikey.ca/product-detail/en/dfrobot/SER0011/1738-1232-ND/7087129
+$ENDCMP
+#
 #End Doc Library

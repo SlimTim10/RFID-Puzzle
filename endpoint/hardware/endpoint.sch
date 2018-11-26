@@ -1,0 +1,129 @@
+EESchema Schematic File Version 4
+EELAYER 26 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L MCU_Module:Arduino_UNO_R3 A1
+U 1 1 5BFCA9F3
+P 5750 3500
+F 0 "A1" H 5750 4678 50  0000 C CNN
+F 1 "Arduino_UNO_R3" H 5750 4587 50  0000 C CNN
+F 2 "Module:Arduino_UNO_R3" H 5900 2450 50  0001 L CNN
+F 3 "https://www.arduino.cc/en/Main/arduinoBoardUno" H 5550 4550 50  0001 C CNN
+	1    5750 3500
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR04
+U 1 1 5BFCAA45
+P 5950 1600
+F 0 "#PWR04" H 5950 1450 50  0001 C CNN
+F 1 "+5V" H 5965 1773 50  0000 C CNN
+F 2 "" H 5950 1600 50  0001 C CNN
+F 3 "" H 5950 1600 50  0001 C CNN
+	1    5950 1600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5950 2500 5950 1600
+$Comp
+L power:GND #PWR03
+U 1 1 5BFCAA7E
+P 5650 6000
+F 0 "#PWR03" H 5650 5750 50  0001 C CNN
+F 1 "GND" H 5655 5827 50  0000 C CNN
+F 2 "" H 5650 6000 50  0001 C CNN
+F 3 "" H 5650 6000 50  0001 C CNN
+	1    5650 6000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5650 4600 5650 6000
+Wire Wire Line
+	5650 6000 5750 6000
+Wire Wire Line
+	5750 6000 5750 4600
+Connection ~ 5650 6000
+Wire Wire Line
+	5850 4600 5850 6000
+Wire Wire Line
+	5850 6000 5750 6000
+Connection ~ 5750 6000
+$Comp
+L rfid-puzzle:RF_LINK_RX U1
+U 1 1 5BFCABBB
+P 3850 3050
+F 0 "U1" H 3769 2635 50  0000 C CNN
+F 1 "RF_LINK_RX" H 3769 2726 50  0000 C CNN
+F 2 "" H 3850 3300 50  0001 C CNN
+F 3 "https://www.digikey.ca/product-detail/en/seeed-technology-co-ltd/113990017/1597-1224-ND/5488259" H 3850 3300 50  0001 C CNN
+	1    3850 3050
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	5250 3100 4100 3100
+Wire Wire Line
+	4100 2900 4300 2900
+Wire Wire Line
+	4300 2900 4300 3600
+$Comp
+L power:GND #PWR01
+U 1 1 5BFCACC3
+P 4300 6000
+F 0 "#PWR01" H 4300 5750 50  0001 C CNN
+F 1 "GND" H 4305 5827 50  0000 C CNN
+F 2 "" H 4300 6000 50  0001 C CNN
+F 3 "" H 4300 6000 50  0001 C CNN
+	1    4300 6000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4100 3000 4450 3000
+$Comp
+L power:+5V #PWR02
+U 1 1 5BFCAD85
+P 4450 1600
+F 0 "#PWR02" H 4450 1450 50  0001 C CNN
+F 1 "+5V" H 4465 1773 50  0000 C CNN
+F 2 "" H 4450 1600 50  0001 C CNN
+F 3 "" H 4450 1600 50  0001 C CNN
+	1    4450 1600
+	1    0    0    -1  
+$EndComp
+$Comp
+L rfid-puzzle:SERVO U2
+U 1 1 5BFCAF05
+P 3900 3700
+F 0 "U2" H 3869 3335 50  0000 C CNN
+F 1 "SERVO" H 3869 3426 50  0000 C CNN
+F 2 "" H 3850 4100 50  0001 C CNN
+F 3 "https://www.digikey.ca/product-detail/en/dfrobot/SER0011/1738-1232-ND/7087129" H 3850 4100 50  0001 C CNN
+	1    3900 3700
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	5250 3800 4100 3800
+Wire Wire Line
+	4100 3600 4300 3600
+Connection ~ 4300 3600
+Wire Wire Line
+	4300 3600 4300 6000
+Wire Wire Line
+	4100 3700 4450 3700
+Wire Wire Line
+	4450 1600 4450 3000
+Connection ~ 4450 3000
+Wire Wire Line
+	4450 3000 4450 3700
+$EndSCHEMATC
