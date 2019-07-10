@@ -24,7 +24,7 @@ enum settings {
 
 static const char *WIN_MESSAGE = "win";
 
-static const uint8_t WIN_TAG_DATA[3] = { 0x01, 0x02, 0x03 };
+static const uint8_t WIN_TAG_DATA[NUM_NFC] = { 0x01, 0x02, 0x03 };
 
 static RH_ASK radio(2000, 0, RF_TX);
 
@@ -35,15 +35,15 @@ static PN532 nfc_1(pn532spi_1);
 static PN532_SPI pn532spi_2(SPI, NFC_CS_2);
 static PN532 nfc_2(pn532spi_2);
 
-static PN532 *nfc[3] = { &nfc_0, &nfc_1, &nfc_2 };
+static PN532 *nfc[NUM_NFC] = { &nfc_0, &nfc_1, &nfc_2 };
 
-static struct uid uid[3] = {
+static struct uid uid[NUM_NFC] = {
 	{ .val = {0, 0, 0, 0, 0, 0, 0}, .length = 7 },
 	{ .val = {0, 0, 0, 0, 0, 0, 0}, .length = 7 },
 	{ .val = {0, 0, 0, 0, 0, 0, 0}, .length = 7 },
 };
 static uint8_t buf[32];
-static uint8_t tag_data[3];
+static uint8_t tag_data[NUM_NFC];
 
 void setup(void) {
 	hal_setup();
@@ -115,7 +115,7 @@ static maybe find_tags(void *empty_) {
 }
 
 /* Reads Mifare Ultralight tag data to buffer */
-/* void -> maybe uint8_t[3] */
+/* void -> maybe uint8_t[NUM_NFC] */
 static maybe read_tags(void *empty_) {
 	bool success = true;
 	uint8_t i;
