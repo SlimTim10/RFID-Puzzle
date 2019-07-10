@@ -5,6 +5,7 @@
 #include "hal.h"
 
 /* #define DEBUG */
+#include "debug.h"
 
 #define die()	while (1)
 
@@ -47,38 +48,27 @@ static uint8_t tag_data[3];
 void setup(void) {
 	hal_setup();
 
-#	ifdef DEBUG
-	Serial.begin(115200);
-	Serial.println("Initializing radio");
-#	endif
+	dbg_begin();
+
+	dbg_println("Initializing radio");
 
 	if (!radio.init()) {
-#		ifdef DEBUG
-		Serial.println("Radio initialization failed");
-#		endif
+		dbg_println("Radio initialization failed");
 		die();
 	}
 
-#	ifdef DEBUG
-	Serial.println("Initializing NFC boards");
-#	endif
+	dbg_println("Initializing NFC boards");
 	uint8_t i;
 	for (i = 0; i < NUM_NFC; i++) {
 		if (init_nfc(nfc[i])) {
-#			ifdef DEBUG
-			Serial.print("Found board #"); Serial.println(i);
-#			endif
+			dbg_print("Found board #"); dbg_println(i);
 		} else {
-#			ifdef DEBUG
-			Serial.print("Didn't find PN53x board #"); Serial.println(i);
-#			endif
+			dbg_print("Didn't find PN53x board #"); dbg_println(i);
 			die();
 		}
 	}
 
-#	ifdef DEBUG
-	Serial.println("Ready!");
-#	endif
+	dbg_println("Ready!");
 }
 
 void loop(void) {
@@ -108,13 +98,13 @@ static maybe find_tags(void *empty_) {
 		success = nfc_read_passive_target(i);
 		success &= (uid[i].length == 7);
 
-#		ifdef DEBUG
 		if (success) {
-			Serial.println("UID: ");
+			dbg_println("UID: ");
+#			ifdef DEBUG
 			nfc[i]->PrintHex(uid[i].val, uid[i].length);
-			Serial.println("");
+#			endif
+			dbg_println("");
 		}
-#		endif
 	}
 
 	if (success) {
@@ -133,11 +123,11 @@ static maybe read_tags(void *empty_) {
 		success = nfc[i]->mifareultralight_ReadPage(4, buf);
 		if (success) {
 			tag_data[i] = buf[0];
+			dbg_println("Reading page 4:");
 #			ifdef DEBUG
-			Serial.println("Reading page 4:");
 			nfc[i]->PrintHexChar(buf, 4);
-			Serial.println("");
 #			endif
+			dbg_println("");
 		}
 	}
 
@@ -164,9 +154,7 @@ static maybe handle_win(void *data_) {
 		for (j = 0; j < WIN_REPEAT; j++) {
 			radio.send((uint8_t *) WIN_MESSAGE, strlen(WIN_MESSAGE));
 			radio.waitPacketSent();
-#		   	ifdef DEBUG
-			Serial.print("Sent: "); Serial.println(WIN_MESSAGE);
-#			endif
+			dbg_print("Sent: "); dbg_println(WIN_MESSAGE);
 			delay(50);
 		}
 		delay(RESET_DELAY);
