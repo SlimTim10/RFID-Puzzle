@@ -8,7 +8,9 @@
 
 #define die()	while (1)
 
-static const char *WIN_MESSAGE = "win";
+static const uint8_t DEVICE_ID = 0x02;
+
+static const char WIN_MESSAGE[] = { DEVICE_ID, 0x01 };
 
 static RH_ASK radio(2000, RF_RX, 0);
 static uint8_t buf[RH_ASK_MAX_MESSAGE_LEN];
