@@ -18,13 +18,14 @@ enum settings {
 	NUM_NFC = 1,
 	NFC_INIT_ATTEMPTS = 3,
 	NFC_FIND_ATTEMPTS = 3,
-	WIN_REPEAT = 3,
-	RESET_DELAY = 2000,		/* ms before resetting after win */
+	MSG_REPEAT = 1,
+	READ_DELAY = 2000,		/* ms after reading */
+	PAYLOAD_LEN = 8,
 };
 
-static const char *WIN_MESSAGE = "win";
+static const char *MESSAGE = "win";
 
-static const uint8_t WIN_TAG_DATA[NUM_NFC] = { 0x01 };
+static const char DEVICE_ID = 0x01;
 
 static RH_ASK radio(2000, 0, RF_TX);
 
@@ -36,8 +37,9 @@ static PN532 *nfc[NUM_NFC] = { &nfc_0 };
 static struct uid uid[NUM_NFC] = {
 	{ .val = {0, 0, 0, 0, 0, 0, 0}, .length = 7 },
 };
-static uint8_t buf[32];
+static uint8_t nfc_buf[32];
 static uint8_t tag_data[NUM_NFC];
+static char payload[PAYLOAD_LEN];
 
 void setup(void) {
 	hal_setup();
@@ -69,7 +71,7 @@ void loop(void) {
 	maybe_do
 		(find_tags,
 		 read_tags,
-		 handle_win);
+		 send_data);
 
 	delay(500);
 }
@@ -114,12 +116,12 @@ static maybe read_tags(void *empty_) {
 	bool success = true;
 	uint8_t i;
 	for (i = 0; i < NUM_NFC && success; i++) {
-		success = nfc[i]->mifareultralight_ReadPage(4, buf);
+		success = nfc[i]->mifareultralight_ReadPage(4, nfc_buf);
 		if (success) {
-			tag_data[i] = buf[0];
+			tag_data[i] = nfc_buf[0];
 			dbg_println("Reading page 4:");
 #			ifdef DEBUG
-			nfc[i]->PrintHexChar(buf, 4);
+			nfc[i]->PrintHexChar(nfc_buf, 4);
 #			endif
 			dbg_println("");
 		}
@@ -134,25 +136,22 @@ static maybe read_tags(void *empty_) {
 
 /* Handles the winning condition if it is met */
 /* uint8_t[] -> maybe void */
-static maybe handle_win(void *data_) {
+static maybe send_data(void *data_) {
 	uint8_t *data = (uint8_t *) data_;
+
+	uint8_t tag_id = data[0];
 	
-	bool success = true;
-	uint8_t i;
-	for (i = 0; i < NUM_NFC && success; i++) {
-		success &= (data[i] == WIN_TAG_DATA[i]);
-	}
+	payload[0] = DEVICE_ID;
+	payload[1] = tag_id;
+	payload[2] = 0x00;
+
+	radio.setModeTx();
+	radio.send((uint8_t *) payload, strlen(payload));
+	radio.waitPacketSent();
+	dbg_print("Sent: "); dbg_println(payload);
+
+	delay(READ_DELAY);
 	
-	if (success) {
-		uint8_t j;
-		for (j = 0; j < WIN_REPEAT; j++) {
-			radio.send((uint8_t *) WIN_MESSAGE, strlen(WIN_MESSAGE));
-			radio.waitPacketSent();
-			dbg_print("Sent: "); dbg_println(WIN_MESSAGE);
-			delay(50);
-		}
-		delay(RESET_DELAY);
-	}
 	return nothing();
 }
 
