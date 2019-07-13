@@ -9,6 +9,8 @@
 
 #define die()	while (1)
 
+static const uint8_t DEVICE_ID = 0x01;
+
 struct uid {
 	uint8_t val[7];
 	uint8_t length;
@@ -22,10 +24,6 @@ enum settings {
 	READ_DELAY = 2000,		/* ms after reading */
 	PAYLOAD_LEN = 8,
 };
-
-static const char *MESSAGE = "win";
-
-static const char DEVICE_ID = 0x01;
 
 static RH_ASK radio(2000, 0, RF_TX);
 
